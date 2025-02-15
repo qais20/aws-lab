@@ -3,17 +3,17 @@
 **Author:** Qais  
 
 ## Table of Contents
-1. Introduction
-2. Infrastructure Overview
-3. Setup Steps
-   - Deploying Backend Servers
-   - Configuring Reverse Proxies
-   - Setting Up Load Balancer (ALB)
-   - Configuring Route 53 for Domain Resolution
-4. Failover and High Availability
-5. Security Considerations
-6. Testing and Validation
-7. Final Thoughts and Improvements
+1. [Introduction](#1-introduction)
+2. [Infrastructure Overview](#2-infrastructure-overview)
+3. [Setup Steps](#3-setup-steps)
+   - [Deploying Backend Servers](#step-1-deploy-backend-servers)
+   - [Configuring Reverse Proxies](#step-2-configure-reverse-proxies)
+   - [Setting Up Load Balancer (ALB)](#step-3-set-up-load-balancer-alb)
+   - [Configuring Route 53 for Domain Resolution](#step-4-configure-route-53)
+4. [Failover and High Availability](#4-failover-and-high-availability)
+5. [Security Considerations](#5-security-considerations)
+6. [Testing and Validation](#6-testing-and-validation)
+7. [Final Thoughts and Improvements](#7-final-thoughts-and-improvements)
 
 ---
 
@@ -31,6 +31,8 @@ This documentation describes the end-to-end deployment of a highly available, lo
 
 ## 2. Infrastructure Overview
 ### Architecture Diagram
+
+
 ```
                         ┌────────────────────────┐
                         │      Route 53 DNS      │
@@ -63,6 +65,8 @@ Backend Server 1 (NGINX)                          Backend Server 2 (NGINX)
 
 ## 3. Setup Steps
 ### Step 1: Deploy Backend Servers
+
+
 - Launched two EC2 instances in AWS (Ubuntu 22.04).
 - Installed NGINX and configured simple HTML pages for identification:
 
@@ -72,6 +76,8 @@ sudo apt update && sudo apt install -y nginx
 - Created `/var/www/html/index.html` with unique text on each backend.
 
 ### Step 2: Configure Reverse Proxies
+![Reverse Proxy Setup](file-3HbQnF9kgS2Urknm55Br9x)
+
 Deployed two Nginx reverse proxies to handle traffic between ALB and Backend Servers.
 
 #### Primary Reverse Proxy Configuration (`/etc/nginx/nginx.conf`):
@@ -110,6 +116,8 @@ sudo systemctl restart nginx
 ```
 
 ### Step 3: Set Up Load Balancer (ALB)
+
+
 - Created an Application Load Balancer (ALB).
 - Configured target groups with the two reverse proxies.
 - Assigned security groups allowing:
@@ -118,6 +126,8 @@ sudo systemctl restart nginx
 - Associated ACM SSL Certificate for HTTPS.
 
 ### Step 4: Configure Route 53
+
+
 - Created an A record in Route 53:
   - Name: `app.qaisnavaei.com`
   - Alias: `Yes`
@@ -187,13 +197,6 @@ curl -I http://nginx-app-loadbalancer-xxxxxxxx.eu-west-2.elb.amazonaws.com
 ---
 
 ## 7. Final Thoughts and Improvements
-### ✅ Achieved:
-✔ Highly available, fault-tolerant architecture.  
-✔ Secure communication via HTTPS.  
-✔ Automatic failover between reverse proxies.  
-✔ Load balancing between backend servers.  
-
-### 🔧 Future Enhancements:
 - Implement auto-scaling for backends.
 - Use CloudFront + WAF for better security & performance.
 - Automate deployment with Terraform/Ansible.
@@ -201,7 +204,5 @@ curl -I http://nginx-app-loadbalancer-xxxxxxxx.eu-west-2.elb.amazonaws.com
 ---
 
 ## Conclusion
-This documentation outlines the full end-to-end deployment of a highly available web infrastructure using AWS ALB, Reverse Proxies, and Backend Servers. The system is configured to handle failures, distribute traffic efficiently, and ensure security with HTTPS.
-
-**Successfully Deployed & Configured!** 
+This documentation outlines the full end-to-end deployment of a highly available web infrastructure using AWS ALB, Reverse Proxies, and Backend Servers.
 
